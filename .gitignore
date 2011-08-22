@@ -1,0 +1,11 @@
+*.bak
+*.orig
+*.orig.*
+*.o
+*.so
+*.py[oc]
+*.sw[pon]
+.bundle
+.sass-cache
+.todo
+.rvmrc
