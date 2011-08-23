@@ -3,41 +3,61 @@
 module Connectqq
   module Authentication
 
+    @consumer_options = {
+      :scheme             => :query_string,
+      :signature_method   => "HMAC-SHA1",
+      :site               => "http://openapi.qzone.qq.com",
+      :authorize_path     => "/oauth/qzoneoauth_authorize",
+      :request_token_path => "/oauth/qzoneoauth_request_token",
+      :access_token_path  => "/oauth/qzoneoauth_access_token",
+      :http_method        => :get,
+    }
+
     # Add access token
     #
-    # @return [Hash]
+    # @return [OAuth::]
     def authenticate(options={})
-      @access_token = options[:access_token]
-      @access_token_secret = options[:access_token_secret]
-      {
-        :access_token => @access_token,
-        :access_token_secret => @access_token_secret,
-      }
+      @access_token = OAuth::AccessToken(consumer, options[:access_token], options[:access_token_secret])
     end
 
     # Check whether user is authenticated
     #
     # @return [Boolean]
     def authenticated?
-      not @access_token.nil? and not @access_token_secret.nil?
+      not @access_token.nil?
     end
 
     # Get request token
     #
-    # @return [OAuthToken]
-    def get_request_token
+    # @param oauth_callback [String]
+    #
+    # @return [OAuth::RequestToken]
+    def get_request_token(options={})
+      @request_token = consumer.get_request_token(options)
     end
 
     # Get authorize URL
     #
+    # @param oauth_callback [String]
+    #
     # @return [String]
-    def get_authorize_url
+    def get_authorize_url(options={})
+      @request_token ||= get_request_token(callback_url, consumer)
+      request_token.authorize_url(options)
     end
 
     # Get access token
     # 
-    # @return [OAuthToken]
-    def get_access_token
+    # @return [OAuth::AccessToken]
+    def get_access_token(request_token, request_token_secret, options={})
+      request_token = OAuth::RequestToken.new(consumer, request_token, request_token_secret)
+      request_token.get_access_token(options)
+    end
+
+    private
+
+    def consumer 
+      OAuthToken::Consumer.new(@consumer_key, @consumer_secret, @consumer_options)
     end
 
   end
