@@ -1,9 +1,10 @@
 # -*- coding: UTF-8 -*-
+require 'oauth'
 
 module Connectqq
   module Authentication
 
-    @consumer_options = {
+    @@consumer_options = {
       :scheme             => :query_string,
       :signature_method   => "HMAC-SHA1",
       :site               => "http://openapi.qzone.qq.com",
@@ -17,7 +18,9 @@ module Connectqq
     #
     # @return [OAuth::]
     def authenticate(options={})
-      @access_token = OAuth::AccessToken(consumer, options[:access_token], options[:access_token_secret])
+      @access_token = options[:access_token]
+      @access_token_secret = options[:access_token_secret]
+      @openid = options[:openid]
     end
 
     # Check whether user is authenticated
@@ -54,10 +57,13 @@ module Connectqq
       request_token.get_access_token(options)
     end
 
-    private
+    def consumer(options={})
+      options = @@consumer_options.merge(options)
+      OAuth::Consumer.new(@consumer_key, @consumer_secret, options)
+    end
 
-    def consumer 
-      OAuthToken::Consumer.new(@consumer_key, @consumer_secret, @consumer_options)
+    def access_token(options={})
+      OAuth::AccessToken.new(consumer(options), @access_token, @access_token_secret)
     end
 
   end

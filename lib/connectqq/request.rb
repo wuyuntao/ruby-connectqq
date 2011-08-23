@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+require 'json'
 
 module Connectqq
   module Request
@@ -11,8 +12,13 @@ module Connectqq
     private
 
     def request(method, uri, options={})
+      options.merge! :format => :json, :openid => @openid
       arguments = parse_uri(method, uri, options)
-      response = @access_token.send(method, *arguments)
+
+      # QQ requires including oauth parameters in body when sending a POST request
+      consumer_options = [:post, :put].include?(method) ? {:scheme => :body, :http_method => :post} : {}
+      response = access_token(consumer_options).send(method, *arguments)
+
       handle_http_error(response)
       message = JSON.parse(response.body)
       handle_message_error(message)
@@ -21,20 +27,19 @@ module Connectqq
 
     def parse_uri(method, uri, options={})
       headers = options.delete(:headers)
-      body = options.delete(:body)
       uri = URI.parse(uri)
-      uri.query = to_query(options)
 
       if [:post, :put].include?(method)
-        [uri.to_s, body, headers]
+        [uri.to_s, options, headers]
       else
+        uri.query = to_query(options)
         [uri.to_s, headers]
       end
     end
 
-    def to_query(hash)
+    def to_query(hash={})
       hash.keys.inject([]) do |query, key|
-        query << "#{URI.encode(key.to_s)}=#{URI.encode(hash[key])}"
+        query << "#{URI.encode(key.to_s)}=#{URI.encode(hash[key].to_s)}"
       end * '&'
     end
 
