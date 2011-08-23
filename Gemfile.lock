@@ -1,0 +1,37 @@
+PATH
+  remote: .
+  specs:
+    connectqq (0.0.1)
+      json
+      oauth
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    addressable (2.2.6)
+    crack (0.1.8)
+    diff-lcs (1.1.2)
+    json (1.5.3)
+    oauth (0.4.5)
+    rake (0.9.2)
+    rspec (2.6.0)
+      rspec-core (~> 2.6.0)
+      rspec-expectations (~> 2.6.0)
+      rspec-mocks (~> 2.6.0)
+    rspec-core (2.6.4)
+    rspec-expectations (2.6.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.6.0)
+    webmock (1.7.4)
+      addressable (> 2.2.5, ~> 2.2)
+      crack (>= 0.1.7)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler
+  connectqq!
+  rake
+  rspec
+  webmock
