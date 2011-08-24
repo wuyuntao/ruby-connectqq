@@ -20,7 +20,7 @@ describe Connectqq::Client do
 
   describe ".add_share" do
     before(:each) do
-      stub_request(:post, /^http:\/\/openapi\.qzone\.qq\.com\/share\/add_share/)
+      stub_request(:post, "http://openapi.qzone.qq.com/share/add_share")
         .to_return(:status  => 200,
                    :body    => fixture('post_message.json'),
                    :headers => {:content_type => "text/html; charset=utf-8"})

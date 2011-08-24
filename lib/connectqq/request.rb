@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 require 'json'
+require 'connectqq/error'
 
 module Connectqq
   module Request
@@ -12,7 +13,9 @@ module Connectqq
     private
 
     def request(method, uri, options={})
-      options.merge! :format => :json, :openid => @openid
+      # options.merge! :format => :json, :openid => @openid
+      # Use JSON response by default
+      options.merge! :openid => @openid
       arguments = parse_uri(method, uri, options)
 
       # QQ requires including oauth parameters in body when sending a POST request
@@ -22,7 +25,7 @@ module Connectqq
       handle_http_error(response)
       message = JSON.parse(response.body)
       handle_message_error(message)
-      message 
+      OpenStruct.new message
     end
 
     def parse_uri(method, uri, options={})
