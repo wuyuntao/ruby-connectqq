@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 
+require 'ostruct'
 require 'connectqq/request'
 require 'connectqq/authentication'
 

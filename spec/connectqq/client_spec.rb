@@ -14,7 +14,10 @@ describe Connectqq::Client do
     it "should return user info " do
       client = Connectqq::Client.new tokens
       msg = client.get_user_info
-      msg["nickname"].should == "Peter"
+      msg.ret.should == 0
+      msg.msg.should == ""
+      msg.nickname.should == "wuyuntao"
+      msg.figureurl.should == "http://qzapp.qlogo.cn/qzapp/218869/8F966AC8FB09140015F6DB0758B844B2/30"
     end
   end
 
@@ -34,7 +37,8 @@ describe Connectqq::Client do
                              :summary => "测试网址摘要",
                              :source  => 3
         
-      msg["ret"].should == 0
+      msg.ret.should == 0
+      msg.msg.should == ""
     end
   end
 
