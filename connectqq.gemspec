@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Wu Yuntao"]
   s.email       = ["wyt.brandon@gmail.com"]
   s.homepage    = "http://github.com/wuyuntao/ruby-connectqq"
+  s.summary     = "Ruby SDK for QQ Connect API"
 
   s.add_runtime_dependency      "oauth"
   s.add_runtime_dependency      "json"
